@@ -11,7 +11,7 @@ let rules = [];
 let enabled = true;
 
 async function loadState() {
-  const data = await chrome.storage.local.get(['proxyAddress', 'proxyRules', 'enabled', 'proxyProtocol']);
+  const data = await chrome.storage.local.get(null);
   proxyAddrInput.value = data.proxyAddress || '';
   proxyProtocolSelect.value = data.proxyProtocol || 'http';
   rules = data.proxyRules || [];
@@ -26,11 +26,10 @@ function renderRules() {
   rules.forEach((rule, i) => {
     const div = document.createElement('div');
     div.className = 'rule-item';
-    div.innerHTML = `
-      <span class="pattern">${escapeHtml(rule.pattern)}</span>
-      <span class="type-tag ${rule.type === 'proxy' ? 'type-proxy' : 'type-direct'}">${rule.type}</span>
-      <button class="btn-remove" data-index="${i}">&times;</button>
-    `;
+    div.innerHTML =
+      '<span class="pattern">' + escapeHtml(rule.pattern) + '</span>' +
+      '<span class="type-tag ' + (rule.type === 'proxy' ? 'type-proxy' : 'type-direct') + '">' + rule.type + '</span>' +
+      '<button class="btn-remove" data-index="' + i + '">&times;</button>';
     ruleListEl.appendChild(div);
   });
 
@@ -48,7 +47,7 @@ function updateStatus() {
     statusEl.textContent = 'Proxy disabled';
     statusEl.className = 'status off';
   } else {
-    statusEl.textContent = `Proxy ON — ${proxyAddrInput.value}`;
+    statusEl.textContent = 'Proxy ON \u2014 ' + proxyAddrInput.value;
     statusEl.className = 'status on';
   }
 }
@@ -58,7 +57,7 @@ function updateToggle() {
 }
 
 function escapeHtml(str) {
-  const div = document.createElement('div');
+  var div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
 }
@@ -75,15 +74,15 @@ proxyProtocolSelect.addEventListener('change', async () => {
 
 toggleEl.addEventListener('click', async () => {
   enabled = !enabled;
-  await chrome.storage.local.set({ enabled });
+  await chrome.storage.local.set({ enabled: enabled });
   updateToggle();
   updateStatus();
 });
 
 addRuleBtn.addEventListener('click', async () => {
-  const pattern = rulePatternInput.value.trim();
+  var pattern = rulePatternInput.value.trim();
   if (!pattern) return;
-  rules.push({ pattern, type: ruleTypeSelect.value });
+  rules.push({ pattern: pattern, type: ruleTypeSelect.value });
   await chrome.storage.local.set({ proxyRules: rules });
   rulePatternInput.value = '';
   renderRules();

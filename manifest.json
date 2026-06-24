@@ -5,11 +5,8 @@
   "description": "Route specific sites through your HTTP proxy",
   "permissions": [
     "proxy",
-    "storage",
-    "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess"
+    "storage"
   ],
-  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },

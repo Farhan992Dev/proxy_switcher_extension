@@ -174,12 +174,12 @@
     <div class="add-rule">
       <input type="text" id="rulePattern" placeholder="Pattern (e.g. *.example.com)">
       <select id="ruleType">
-        <option value="proxy">Proxy</option>
         <option value="direct">Direct</option>
+        <option value="proxy">Proxy</option>
       </select>
       <button class="btn-add" id="addRule">Add</button>
     </div>
-    <div class="hint">Use * as wildcard. *.example.com matches all subdomains.</div>
+    <div class="hint">All traffic through proxy. Add Direct rules to bypass specific sites.</div>
   </div>
 
   <div class="status off" id="status">Proxy disabled</div>
